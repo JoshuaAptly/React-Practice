@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+import { useNavigate } from "react-router-dom";
+
 interface User {
   id: number;
   name: string;
@@ -9,6 +11,8 @@ interface User {
 
 export function Home() {
   const [user, setUser] = useState<User[]>([]);
+
+  const navigate = useNavigate();
 
   async function loadUsers() {
     const response = await fetch("https://jsonplaceholder.typicode.com/users");
@@ -22,6 +26,14 @@ export function Home() {
     void loadUsers();
   }, []);
 
+  function nextPage() {
+    navigate("/cform");
+  }
+
+  function goToContext() {
+    navigate("/context");
+  }
+
   return (
     <div>
       {user.map((item) => {
@@ -33,12 +45,33 @@ export function Home() {
           </div>
         );
       })}
-      <button
-        style={{ background: "blue", color: "white" }}
-        onClick={() => void loadUsers()}
+      <div
+        style={{
+          display: "flex",
+          gap: "10px",
+          marginTop: "20px",
+          flexDirection: "row",
+        }}
       >
-        Update
-      </button>
+        <button
+          style={{ background: "blue", color: "white" }}
+          onClick={() => void loadUsers()}
+        >
+          Update
+        </button>
+        <button
+          style={{ background: "blue", color: "white" }}
+          onClick={nextPage}
+        >
+          Next Page
+        </button>
+        <button
+          style={{ background: "green", color: "white" }}
+          onClick={goToContext}
+        >
+          Context API
+        </button>
+      </div>
     </div>
   );
 }
